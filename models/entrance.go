@@ -13,11 +13,11 @@ var doorWidthRegexp = regexp.MustCompile("(\\d+) cm")
 var stepsRegexp = regexp.MustCompile(": (\\d+)")
 
 type MainEntrance struct {
-	Width     int  `json:"width,omitempty"`
-	Bell      bool `json:"bell,omitempty"`
-	Escalator bool `json:"escalator,omitempty"`
-	Handrail  bool `json:"handrail,omitempty"`
-	Steps     int  `json:"steps,omitempty"`
+	Width     int  `json:"width"`
+	Bell      bool `json:"bell"`
+	Escalator bool `json:"escalator"`
+	Handrail  bool `json:"handrail"`
+	Steps     int  `json:"steps"`
 }
 
 func (me *MainEntrance) Parse(sel *goquery.Selection) error {

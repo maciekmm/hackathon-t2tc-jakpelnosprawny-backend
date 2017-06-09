@@ -13,12 +13,12 @@ import (
 var distanceRegexp = regexp.MustCompile("(\\d+) m$")
 
 type PublicTransport struct {
-	Name               string `json:"name,omitempty"`
-	Distance           int    `json:"distance,omitempty"`
-	StreetCrossing     bool   `json:"street_crossing,omitempty"`
-	PedestrianCrossing bool   `json:"pedestrian_crossing,omitempty"`
-	Sound              bool   `json:"sound,omitempty"`
-	TrafficLights      bool   `json:"traffic_lights,omitempty"`
+	Name               string `json:"name"`
+	Distance           int    `json:"distance"`
+	StreetCrossing     bool   `json:"street_crossing"`
+	PedestrianCrossing bool   `json:"pedestrian_crossing"`
+	Sound              bool   `json:"sound"`
+	TrafficLights      bool   `json:"traffic_lights"`
 }
 
 type Access []PublicTransport
