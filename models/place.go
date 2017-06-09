@@ -11,23 +11,16 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type PictogramType int
-
-const (
-	TypeWheelchairAccessible                  PictogramType = 1
-	TypeFacilitiesForBlind                                  = 20
-	TypeFacilitiesForIntellectualDisabilities               = 18
-)
-
 type Place struct {
-	ID         string      `json:"id,omitempty"`
-	Name       string      `json:"name,omitempty"`
-	Longitude  float64     `json:"longitude,omitempty"`
-	Latitude   float64     `json:"latitude,omitempty"`
-	Pictograms *Pictograms `json:"pictograms,omitempty"`
-	Basics     *Basics     `json:"basics,omitempty"`
-	Access     *Access     `json:"access,omitempty"`
-	Parking    *Parking    `json:"parking,omitempty"`
+	ID          string        `json:"id,omitempty"`
+	Name        string        `json:"name,omitempty"`
+	Longitude   float64       `json:"longitude,omitempty"`
+	Latitude    float64       `json:"latitude,omitempty"`
+	Pictograms  *Pictograms   `json:"pictograms,omitempty"`
+	Basics      *Basics       `json:"basics,omitempty"`
+	Access      *Access       `json:"access,omitempty"`
+	Parking     *Parking      `json:"parking,omitempty"`
+	MainEntrace *MainEntrance `json:"main_entrance,omitempty"`
 }
 
 func (p *Place) Parse(sel *goquery.Selection) (err error) {
@@ -73,6 +66,9 @@ func (p *Place) Parse(sel *goquery.Selection) (err error) {
 		case "Dojazd, komunikacja":
 			p.Access = &Access{}
 			p.Access.Parse(sel)
+		case "Wejście główne, dojście":
+			p.MainEntrace = &MainEntrance{}
+			p.MainEntrace.Parse(sel)
 		}
 	})
 	return
