@@ -20,7 +20,7 @@ const (
 )
 
 type Place struct {
-	ID string `json:"id,omitempty"`
+	ID         string      `json:"id,omitempty"`
 	Name       string      `json:"name,omitempty"`
 	Longitude  float64     `json:"longitude,omitempty"`
 	Latitude   float64     `json:"latitude,omitempty"`
@@ -70,6 +70,9 @@ func (p *Place) Parse(sel *goquery.Selection) (err error) {
 		case "Parking":
 			p.Parking = &Parking{}
 			p.Parking.Parse(sel)
+		case "Dojazd, komunikacja":
+			p.Access = &Access{}
+			p.Access.Parse(sel)
 		}
 	})
 	return
