@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
+
+var Mapping = map[int]string{}
 
 var pictogramIDMatcher = regexp.MustCompile("/pictograms/(\\d+)\\.png")
 
@@ -21,6 +24,11 @@ func (p *Pictograms) Parse(sel *goquery.Selection) error {
 			fmt.Println("could not parse " + err.Error())
 		}
 		pict = append(pict, id)
+		alt, ok := sel.Attr("alt")
+		if !ok {
+			fmt.Println("could not parse alt text " + err.Error())
+		}
+		Mapping[id] = strings.TrimSpace(alt)
 	})
 	*p = pict
 	return nil

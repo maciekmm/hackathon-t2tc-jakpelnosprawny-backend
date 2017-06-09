@@ -55,6 +55,7 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 	}
 	http.HandleFunc("/", servePlaces)
+	http.HandleFunc("/pictograms", servePictogramMappings)
 	if err := server.ListenAndServe(); err != nil {
 		fmt.Println(err.Error())
 	}
@@ -68,4 +69,19 @@ func servePlaces(rw http.ResponseWriter, req *http.Request) {
 	req.Header.Add("Content-Type", "text/json")
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(marshalledPlaces)
+}
+
+func servePictogramMappings(rw http.ResponseWriter, req *http.Request) {
+	if req.Method == "OPTIONS" {
+		rw.WriteHeader(http.StatusOK)
+		return
+	}
+	req.Header.Add("Content-Type", "text/json")
+	rw.WriteHeader(http.StatusOK)
+	byt, err := json.Marshal(models.Mapping)
+	if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	rw.Write(byt)
 }
