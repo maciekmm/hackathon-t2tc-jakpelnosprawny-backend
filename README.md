@@ -1,4 +1,4 @@
-JakNiepełnosprawny
+JakPełnosprawny
 ===
 
 Dane dostępne dzięki uprzejmości serwisu [niepelnosprawnik.pl](https://niepelnosprawnik.pl)
