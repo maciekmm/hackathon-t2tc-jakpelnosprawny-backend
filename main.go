@@ -14,10 +14,10 @@ import (
 	"github.com/maciekmm/t2tc-backend/models"
 )
 
-var marshalledPlaces []byte
+var marshalled map[string][]byte = make(map[string][]byte)
 
 func main() {
-	places := []*models.Place{}
+	places := map[string][]*models.Place{}
 	pages, err := ioutil.ReadDir("./scraper/pages-downloaded")
 
 	if err != nil {
@@ -27,6 +27,14 @@ func main() {
 	for _, page := range pages {
 		if page.IsDir() {
 			continue
+		}
+		city := "toruń"
+		split := strings.Split(page.Name(), "-")
+		if len(split) > 1 {
+			city = strings.TrimSuffix(split[1], ".html")
+		}
+		if _, ok := places[city]; !ok {
+			places[city] = []*models.Place{}
 		}
 		file, err := os.OpenFile(fmt.Sprintf("%s/%s", "./scraper/pages-downloaded", page.Name()), os.O_RDONLY, 0755)
 		if err != nil {
@@ -42,11 +50,15 @@ func main() {
 		if err := page.Parse(doc.Selection); err != nil {
 			panic(err)
 		}
-		places = append(places, page)
+		places[city] = append(places[city], page)
 	}
 
-	if marshalledPlaces, err = json.Marshal(&places); err != nil {
-		panic(err)
+	for city, places := range places {
+		if marshalledPlaces, err := json.Marshal(&places); err != nil {
+			panic(err)
+		} else {
+			marshalled[city] = marshalledPlaces
+		}
 	}
 
 	server := http.Server{
@@ -66,9 +78,19 @@ func servePlaces(rw http.ResponseWriter, req *http.Request) {
 		rw.WriteHeader(http.StatusOK)
 		return
 	}
+	city := req.URL.Query().Get("city")
+	if len(city) == 0 {
+		city = "toruń"
+	}
+
+	byt, ok := marshalled[city]
+	if !ok {
+		rw.WriteHeader(http.StatusNotFound)
+		return
+	}
 	req.Header.Add("Content-Type", "text/json")
 	rw.WriteHeader(http.StatusOK)
-	rw.Write(marshalledPlaces)
+	rw.Write(byt)
 }
 
 func servePictogramMappings(rw http.ResponseWriter, req *http.Request) {
