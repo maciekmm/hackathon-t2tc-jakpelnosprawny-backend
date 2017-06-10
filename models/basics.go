@@ -22,8 +22,8 @@ func (b *Basics) Parse(sel *goquery.Selection) error {
 			b.Phones = append(b.Phones, strings.TrimPrefix(text, "tel. "))
 		} else if strings.HasPrefix(text, "fax.") {
 			b.Faxes = append(b.Faxes, strings.TrimPrefix(text, "fax. "))
-		} else if strings.HasPrefix(text, "ul.") || strings.HasPrefix(text, "al. ") {
-			b.Street = strings.TrimPrefix(strings.TrimPrefix(text, "al. "), "ul. ")
+		} else if strings.HasPrefix(text, "ul.") || strings.HasPrefix(text, "al. ") || strings.HasPrefix(text, "pl. ") {
+			b.Street = text
 		} else if strings.ContainsRune(text, '@') {
 			b.Email = text
 		} else if strings.Contains(text, "http") {
