@@ -45,7 +45,7 @@ func main() {
 			panic(err)
 		}
 		page := &models.Place{
-			ID: strings.TrimSuffix(page.Name(), ".html"),
+			ID: strings.TrimSuffix(split[0], ".html"),
 		}
 		if err := page.Parse(doc.Selection); err != nil {
 			panic(err)
